@@ -3,10 +3,18 @@ import re
 import csv
 import pandas as pd
 from datetime import datetime
+import os
 
-# Chemin du fichier PDF
-pdf_path = "Bill - February.pdf"  # Remplacez par le chemin réel de votre fichier
-output_csv = "homebank_transactions.csv"
+# Demander à l'utilisateur le nom du fichier PDF
+pdf_name = input("Entrez le nom du fichier PDF (ex: Bill - February.pdf) : ")
+
+# Construire le chemin du fichier
+pdf_path = os.path.join("/home/fabien/Inbox", pdf_name)
+
+# Vérifier si le fichier existe
+if not os.path.exists(pdf_path):
+    print(f"Erreur : Le fichier '{pdf_name}' n'existe pas dans /home/fabien/Inbox.")
+    exit()
 
 # Ouvrir le document PDF
 doc = fitz.open(pdf_path)
@@ -54,6 +62,7 @@ df_final.insert(6, "category", "")
 df_final.insert(7, "tags", "")
 
 # Sauvegarder le fichier CSV compatible avec HomeBank
+output_csv = os.path.join("/home/fabien/Inbox", "homebank_transactions_viseca.csv")
 df_final.to_csv(output_csv, index=False, encoding="utf-8")
 
-print(f"Le fichier CSV pour HomeBank a été généré : {output_csv}")
+print(f"✅ Le fichier CSV pour HomeBank a été généré : {output_csv}")
